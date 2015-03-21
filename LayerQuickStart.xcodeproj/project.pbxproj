@@ -12,6 +12,8 @@
 		5CBECC371ABCFA75005755D0 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5CBECC361ABCFA75005755D0 /* Images.xcassets */; };
 		5CBECC3A1ABCFA75005755D0 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5CBECC381ABCFA75005755D0 /* LaunchScreen.xib */; };
 		5CBECC461ABCFA75005755D0 /* LayerQuickStartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBECC451ABCFA75005755D0 /* LayerQuickStartTests.swift */; };
+		5CBECC501ABCFE42005755D0 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBECC4F1ABCFE42005755D0 /* ChatViewController.swift */; };
+		5CBECC521ABCFED6005755D0 /* ChatMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBECC511ABCFED6005755D0 /* ChatMessageCell.swift */; };
 		9C257A59DD4E452B3497DB00 /* libPods-LayerQuickStart.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 97A795FDD6284A7AE628090E /* libPods-LayerQuickStart.a */; };
 /* End PBXBuildFile section */
 
@@ -35,6 +37,8 @@
 		5CBECC3F1ABCFA75005755D0 /* LayerQuickStartTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LayerQuickStartTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CBECC441ABCFA75005755D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5CBECC451ABCFA75005755D0 /* LayerQuickStartTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerQuickStartTests.swift; sourceTree = "<group>"; };
+		5CBECC4F1ABCFE42005755D0 /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
+		5CBECC511ABCFED6005755D0 /* ChatMessageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatMessageCell.swift; sourceTree = "<group>"; };
 		7B7EFF78959187302F39F21C /* Pods-LayerQuickStart.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LayerQuickStart.release.xcconfig"; path = "Pods/Target Support Files/Pods-LayerQuickStart/Pods-LayerQuickStart.release.xcconfig"; sourceTree = "<group>"; };
 		89B4D703F2A09B35E020EA83 /* Pods-LayerQuickStart.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LayerQuickStart.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LayerQuickStart/Pods-LayerQuickStart.debug.xcconfig"; sourceTree = "<group>"; };
 		97A795FDD6284A7AE628090E /* libPods-LayerQuickStart.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LayerQuickStart.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -91,6 +95,8 @@
 			isa = PBXGroup;
 			children = (
 				5CBECC2F1ABCFA75005755D0 /* AppDelegate.swift */,
+				5CBECC4F1ABCFE42005755D0 /* ChatViewController.swift */,
+				5CBECC511ABCFED6005755D0 /* ChatMessageCell.swift */,
 				5CBECC331ABCFA75005755D0 /* Main.storyboard */,
 				5CBECC361ABCFA75005755D0 /* Images.xcassets */,
 				5CBECC381ABCFA75005755D0 /* LaunchScreen.xib */,
@@ -268,6 +274,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5CBECC521ABCFED6005755D0 /* ChatMessageCell.swift in Sources */,
+				5CBECC501ABCFE42005755D0 /* ChatViewController.swift in Sources */,
 				5CBECC301ABCFA75005755D0 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
