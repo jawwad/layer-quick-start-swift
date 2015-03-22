@@ -8,21 +8,21 @@
 
 import UIKit
 
-let LQSLayerAppIDString = "LAYER_APP_ID"
+private let LQSLayerAppIDString = "LAYER_APP_ID"
 
 #if arch(i386) || arch(x86_64) // simulator
-    let LQSCurrentUserID = "Simulator"
+    let LQSCurrentUserID     = "Simulator"
     let LQSParticipantUserID = "Device"
-    let LQSInitialMessageText = "Hey Device! This is your friend, Simulator."
 #else // device
-    let LQSCurrentUserID = "Device"
+    let LQSCurrentUserID     = "Device"
     let LQSParticipantUserID = "Simulator"
-    let LQSInitialMessageText = "Hey Simulator! This is your friend, Device."
 #endif
 
+let LQSInitialMessageText = "Hey \(LQSParticipantUserID)! This is your friend, \(LQSCurrentUserID)."
 let LQSParticipant2UserID = "Dashboard"
 
-typealias CompletionBlock = ((Bool, NSError!) -> Void)!
+typealias AuthenticationCompletionBlock = (Bool, NSError?) -> Void
+typealias IdentityTokenCompletionBlock =  (String?, NSError?) -> Void
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, LYRClientDelegate, UIAlertViewDelegate {
@@ -47,17 +47,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LYRClientDelegate, UIAler
             // See "Quick Start - Connect" for more details
             // https://developer.layer.com/docs/quick-start/ios#connect
             layerClient.connectWithCompletion { success, error in
-                if !success {
-                    println("Failed to connect to Layer: \(error!.localizedDescription)")
+                if let error = error {
+                    println("Failed to connect to Layer: \(error.localizedDescription)")
                 } else {
-                    // For the purposes of this Quick Start project, let's authenticate as a user named 'Device'.  Alternatively, you can authenticate as a user named 'Simulator' if you're running on a Simulator.
-                    let userIDString = LQSCurrentUserID
-
                     // Once connected, authenticate user.
                     // Check Authenticate step for authenticateLayerWithUserID source
-                    self.authenticateLayerWithUserID(userIDString) { success, error in
-                        if !success {
-                            println("Failed Authenticating Layer Client with error: \(error!.localizedDescription)")
+                    self.authenticateLayerWithUserID(LQSCurrentUserID) { success, error in
+                        if let error = error {
+                            println("Failed Authenticating Layer Client with error: \(error.localizedDescription)")
                         }
                     }
                 }
@@ -73,79 +70,60 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LYRClientDelegate, UIAler
         return true
     }
 
-    func authenticateLayerWithUserID(userID: String, completion: CompletionBlock) {
-
+    func authenticateLayerWithUserID(userID: String, authenticationCompletion: AuthenticationCompletionBlock) {
         // Check to see if the layerClient is already authenticated.
         if let authenticatedUserID = layerClient.authenticatedUserID {
             // If the layerClient is authenticated with the requested userID, complete the authentication process.
             if authenticatedUserID == userID {
                 println("Layer Authenticated as User \(authenticatedUserID)")
-                if completion != nil {
-                    completion(true, nil)
-                }
-                return
+                authenticationCompletion(true, nil)
             } else {
                 // If the authenticated userID is different, then deauthenticate the current client and re-authenticate with the new userID.
                 layerClient.deauthenticateWithCompletion { success, error in
-                    if error == nil {
-                        self.authenticationTokenWithUserId(userID) { success, error in
-                            if completion != nil {
-                                completion(success, error)
-                            }
-                        }
+                    if success {
+                        self.authenticationTokenWithUserId(userID, authenticationCompletion)
+                    } else if let error = error {
+                        authenticationCompletion(false, error)
                     } else {
-                        if completion != nil {
-                            completion(false, error)
-                        }
+                        assertionFailure("Must have an error when success = false")
                     }
                 }
             }
         } else {
             // If the layerClient isn't already authenticated, then authenticate.
-            authenticationTokenWithUserId(userID) { success, error in
-                if completion != nil {
-                    completion(success, error)
-                }
-            }
+            authenticationTokenWithUserId(userID, authenticationCompletion)
         }
     }
 
-    func authenticationTokenWithUserId(userID: String, completion: CompletionBlock) {
-
+    func authenticationTokenWithUserId(userID: String, authenticationCompletion: AuthenticationCompletionBlock) {
         // 1. Request an authentication Nonce from Layer
         layerClient.requestAuthenticationNonceWithCompletion { nonce, error in
             if nonce == nil {
-                if completion != nil {
-                    completion(false, error)
-                }
+                authenticationCompletion(false, error)
                 return
             }
 
             // 2. Acquire identity Token from Layer Identity Service
             self.requestIdentityTokenForUserID(userID, appID: self.layerClient.appID.UUIDString, nonce: nonce) { identityToken, error in
                 if identityToken == nil {
-                    if completion != nil {
-                        completion(false, error)
-                    }
+                    authenticationCompletion(false, error)
                     return
                 }
 
                 // 3. Submit identity token to Layer for validation
                 self.layerClient.authenticateWithIdentityToken(identityToken) { authenticatedUserID, error in
                     if authenticatedUserID != nil {
-                        if completion != nil {
-                            completion(true, nil)
-                        }
+                        authenticationCompletion(true, nil)
                         println("Layer Authenticated as User: \(authenticatedUserID)")
                     } else {
-                        completion(false, error)
+                        authenticationCompletion(false, error)
                     }
                 }
             }
         }
     }
 
-    func requestIdentityTokenForUserID(userID: String, appID: String, nonce: String, completion: (String!, NSError!) -> Void) {
+    func requestIdentityTokenForUserID(userID: String, appID: String, nonce: String, tokenCompletion: IdentityTokenCompletionBlock) {
         let identityTokenURL = NSURL(string: "https://layer-identity-provider.herokuapp.com/identity_tokens")!
         let request = NSMutableURLRequest(URL: identityTokenURL)
         request.HTTPMethod = "POST"
@@ -161,7 +139,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LYRClientDelegate, UIAler
 
         let dataTask = session.dataTaskWithRequest(request) { data, response, error in
             if error != nil {
-                completion(nil, error)
+                tokenCompletion(nil, error)
                 return
             }
 
@@ -169,7 +147,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LYRClientDelegate, UIAler
             let responseObject = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as NSDictionary
             if responseObject["error"] == nil {
                 let identityToken = responseObject["identity_token"] as String
-                completion(identityToken, nil)
+                tokenCompletion(identityToken, nil)
             } else {
                 let domain = "layer-identity-provider.herokuapp.com"
                 let code = responseObject["status"]!.integerValue
@@ -179,7 +157,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LYRClientDelegate, UIAler
                 ]
 
                 let error = NSError(domain: domain, code: code, userInfo: userInfo)
-                completion(nil, error)
+                tokenCompletion(nil, error)
             }
         }
         dataTask.resume()
