@@ -28,6 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5C8AD47C1ABE0B05003BAB02 /* LayerQuickStart-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LayerQuickStart-Bridging-Header.h"; sourceTree = "<group>"; };
 		5CBECC2A1ABCFA75005755D0 /* LayerQuickStart.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LayerQuickStart.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CBECC2E1ABCFA75005755D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5CBECC2F1ABCFA75005755D0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -101,6 +102,7 @@
 				5CBECC361ABCFA75005755D0 /* Images.xcassets */,
 				5CBECC381ABCFA75005755D0 /* LaunchScreen.xib */,
 				5CBECC2D1ABCFA75005755D0 /* Supporting Files */,
+				5C8AD47C1ABE0B05003BAB02 /* LayerQuickStart-Bridging-Header.h */,
 			);
 			path = LayerQuickStart;
 			sourceTree = "<group>";
@@ -400,9 +402,12 @@
 			baseConfigurationReference = 89B4D703F2A09B35E020EA83 /* Pods-LayerQuickStart.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = LayerQuickStart/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "LayerQuickStart/LayerQuickStart-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -411,9 +416,11 @@
 			baseConfigurationReference = 7B7EFF78959187302F39F21C /* Pods-LayerQuickStart.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = LayerQuickStart/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "LayerQuickStart/LayerQuickStart-Bridging-Header.h";
 			};
 			name = Release;
 		};
