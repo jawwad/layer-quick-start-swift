@@ -9,5 +9,7 @@
 import UIKit
 
 class ChatMessageCell: UITableViewCell {
-
+    @IBOutlet weak var deviceLabel: UILabel!
+    @IBOutlet weak var messageLabel: UILabel!
+    @IBOutlet weak var messageStatus: UIImageView!
 }
