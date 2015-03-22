@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5C92B6291ABF6D7C002E9C9C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5C92B6281ABF6D7C002E9C9C /* Images.xcassets */; };
 		5CBECC301ABCFA75005755D0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBECC2F1ABCFA75005755D0 /* AppDelegate.swift */; };
 		5CBECC351ABCFA75005755D0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5CBECC331ABCFA75005755D0 /* Main.storyboard */; };
-		5CBECC371ABCFA75005755D0 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5CBECC361ABCFA75005755D0 /* Images.xcassets */; };
 		5CBECC3A1ABCFA75005755D0 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5CBECC381ABCFA75005755D0 /* LaunchScreen.xib */; };
 		5CBECC461ABCFA75005755D0 /* LayerQuickStartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBECC451ABCFA75005755D0 /* LayerQuickStartTests.swift */; };
 		5CBECC501ABCFE42005755D0 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBECC4F1ABCFE42005755D0 /* ChatViewController.swift */; };
@@ -29,11 +29,11 @@
 
 /* Begin PBXFileReference section */
 		5C8AD47C1ABE0B05003BAB02 /* LayerQuickStart-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LayerQuickStart-Bridging-Header.h"; sourceTree = "<group>"; };
+		5C92B6281ABF6D7C002E9C9C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		5CBECC2A1ABCFA75005755D0 /* LayerQuickStart.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LayerQuickStart.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CBECC2E1ABCFA75005755D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5CBECC2F1ABCFA75005755D0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5CBECC341ABCFA75005755D0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		5CBECC361ABCFA75005755D0 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		5CBECC391ABCFA75005755D0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		5CBECC3F1ABCFA75005755D0 /* LayerQuickStartTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LayerQuickStartTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CBECC441ABCFA75005755D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -95,11 +95,11 @@
 		5CBECC2C1ABCFA75005755D0 /* LayerQuickStart */ = {
 			isa = PBXGroup;
 			children = (
+				5CBECC331ABCFA75005755D0 /* Main.storyboard */,
 				5CBECC2F1ABCFA75005755D0 /* AppDelegate.swift */,
 				5CBECC4F1ABCFE42005755D0 /* ChatViewController.swift */,
 				5CBECC511ABCFED6005755D0 /* ChatMessageCell.swift */,
-				5CBECC331ABCFA75005755D0 /* Main.storyboard */,
-				5CBECC361ABCFA75005755D0 /* Images.xcassets */,
+				5C92B6281ABF6D7C002E9C9C /* Images.xcassets */,
 				5CBECC381ABCFA75005755D0 /* LaunchScreen.xib */,
 				5CBECC2D1ABCFA75005755D0 /* Supporting Files */,
 				5C8AD47C1ABE0B05003BAB02 /* LayerQuickStart-Bridging-Header.h */,
@@ -223,9 +223,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C92B6291ABF6D7C002E9C9C /* Images.xcassets in Resources */,
 				5CBECC351ABCFA75005755D0 /* Main.storyboard in Resources */,
 				5CBECC3A1ABCFA75005755D0 /* LaunchScreen.xib in Resources */,
-				5CBECC371ABCFA75005755D0 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
