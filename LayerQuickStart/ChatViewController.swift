@@ -194,7 +194,9 @@ class ChatViewController: UIViewController, UITextViewDelegate, LYRQueryControll
             switch message.recipientStatusForUserID(LQSParticipantUserID) {
             case .Sent:
                 cell.messageStatus.image = UIImage(named:LQSMessageSentImageName)
-                timestampText = "Sent: \(LQSDateFormatter.stringFromDate(message.sentAt))"
+                if let sentAt = message.sentAt {
+                    timestampText = "Sent: \(LQSDateFormatter.stringFromDate(sentAt))"
+                }
             case .Delivered:
                 cell.messageStatus.image = UIImage(named: LQSMessageDeliveredImageName)
                 timestampText = "Delivered: \(LQSDateFormatter.stringFromDate(message.sentAt))"
