@@ -21,8 +21,8 @@ private let LQSLayerAppIDString = "LAYER_APP_ID"
 let LQSInitialMessageText = "Hey \(LQSParticipantUserID)! This is your friend, \(LQSCurrentUserID)."
 let LQSParticipant2UserID = "Dashboard"
 
-typealias AuthenticationCompletionBlock = (Bool, NSError?) -> Void
-typealias IdentityTokenCompletionBlock =  (String?, NSError?) -> Void
+typealias AuthenticationCompletionBlock = (error: NSError?) -> Void
+typealias IdentityTokenCompletionBlock  = (String?, NSError?) -> Void
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, LYRClientDelegate, UIAlertViewDelegate {
@@ -52,7 +52,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LYRClientDelegate, UIAler
                 } else {
                     // Once connected, authenticate user.
                     // Check Authenticate step for authenticateLayerWithUserID source
-                    self.authenticateLayerWithUserID(LQSCurrentUserID) { success, error in
+                    self.authenticateLayerWithUserID(LQSCurrentUserID) { error in
                         if let error = error {
                             println("Failed Authenticating Layer Client with error: \(error.localizedDescription)")
                         }
@@ -76,14 +76,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LYRClientDelegate, UIAler
             // If the layerClient is authenticated with the requested userID, complete the authentication process.
             if authenticatedUserID == userID {
                 println("Layer Authenticated as User \(authenticatedUserID)")
-                authenticationCompletion(true, nil)
+                authenticationCompletion(error: nil)
             } else {
                 // If the authenticated userID is different, then deauthenticate the current client and re-authenticate with the new userID.
                 layerClient.deauthenticateWithCompletion { success, error in
                     if success {
                         self.authenticationTokenWithUserId(userID, authenticationCompletion)
                     } else if let error = error {
-                        authenticationCompletion(false, error)
+                        authenticationCompletion(error: error)
                     } else {
                         assertionFailure("Must have an error when success = false")
                     }
@@ -99,24 +99,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LYRClientDelegate, UIAler
         // 1. Request an authentication Nonce from Layer
         layerClient.requestAuthenticationNonceWithCompletion { nonce, error in
             if nonce == nil {
-                authenticationCompletion(false, error)
+                authenticationCompletion(error: error)
                 return
             }
 
             // 2. Acquire identity Token from Layer Identity Service
             self.requestIdentityTokenForUserID(userID, appID: self.layerClient.appID.UUIDString, nonce: nonce) { identityToken, error in
                 if identityToken == nil {
-                    authenticationCompletion(false, error)
+                    authenticationCompletion(error: error)
                     return
                 }
 
                 // 3. Submit identity token to Layer for validation
                 self.layerClient.authenticateWithIdentityToken(identityToken) { authenticatedUserID, error in
                     if authenticatedUserID != nil {
-                        authenticationCompletion(true, nil)
                         println("Layer Authenticated as User: \(authenticatedUserID)")
+                        authenticationCompletion(error: nil)
                     } else {
-                        authenticationCompletion(false, error)
+                        authenticationCompletion(error: error)
                     }
                 }
             }
@@ -178,7 +178,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LYRClientDelegate, UIAler
             application.registerForRemoteNotifications()
         } else {
             // Register device for iOS7
-            application.registerForRemoteNotificationTypes(.Alert | .Sound | .Badge)
+            application.registerForRemoteNotificationTypes(.Alert | .Badge | .Sound)
         }
     }
 
@@ -186,13 +186,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LYRClientDelegate, UIAler
         // Send device token to Layer so Layer can send pushes to this device.
         // For more information about Push, check out:
         // https://developer.layer.com/docs/guides/ios#push-notification
-        var error: NSError?
 
+        var error: NSError?
         let success = layerClient.updateRemoteNotificationDeviceToken(deviceToken, error: &error)
         if success {
             println("Application did register for remote notifications: \(deviceToken)")
-        } else {
-            println("Failed updating device token with error: \(error!.localizedDescription)")
+        } else if let error = error {
+            println("Failed updating device token with error: \(error.localizedDescription)")
         }
     }
 
@@ -222,7 +222,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LYRClientDelegate, UIAler
             println("Failed processing push notification with error: \(error!.localizedDescription)")
             completionHandler(.NoData)
         }
-
     }
 
     func messageFromRemoteNotification(remoteNotification: NSDictionary) -> LYRMessage {
@@ -237,14 +236,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LYRClientDelegate, UIAler
 
         var error: NSError?
         let messages = layerClient.executeQuery(query, error: &error)
-        if error == nil {
+        if let error = error {
+            println("Query failed with error \(error.localizedDescription)")
+        } else {
             println("Query contains \(messages.count) messages")
             let message = messages.firstObject as LYRMessage
             let messagePart = message.parts[0] as LYRMessagePart
 
             println("Pushed Message Contents: \(NSString(data: messagePart.data, encoding: NSUTF8StringEncoding))")
-        } else {
-            println("Query failed with error \(error?.localizedDescription)")
         }
 
         return messages.firstObject as LYRMessage
@@ -313,18 +312,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LYRClientDelegate, UIAler
 
         if !NSUserDefaults.standardUserDefaults().boolForKey(LQSApplicationHasLaunchedOnceDefaultsKey) {
             NSUserDefaults.standardUserDefaults().setBool(true, forKey: LQSApplicationHasLaunchedOnceDefaultsKey)
-            NSUserDefaults.standardUserDefaults().synchronize()
 
             // This is the first launch ever
 
-            let alert = UIAlertView(
+            UIAlertView(
                 title: "Hello!",
                 message: "This is a very simple example of a chat app using Layer. Launch this app on a Simulator and a Device to start a 1:1 conversation. If you shake the Device the navbar color will change on both the Simulator and Device.",
                 delegate: nil,
-                cancelButtonTitle: nil)
-
-            alert.addButtonWithTitle("Got It!")
-            alert.show()
+                cancelButtonTitle: "Got It!").show()
         }
     }
 
