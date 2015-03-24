@@ -39,7 +39,13 @@ func LSRandomColor() -> UIColor {
 
 class ChatViewController: UIViewController, UITextViewDelegate, LYRQueryControllerDelegate, UITableViewDataSource, UITableViewDelegate {
 
-    var layerClient: LYRClient!
+    var layerClient: LYRClient! {
+        didSet {
+            fetchLayerConversation()
+            setupLayerNotificationObservers()
+            tableView?.reloadData()
+        }
+    }
 
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private weak var sendButton: UIButton!
@@ -57,9 +63,6 @@ class ChatViewController: UIViewController, UITextViewDelegate, LYRQueryControll
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        setupLayerNotificationObservers()
-        fetchLayerConversation()
 
         // Setup for Shake
         becomeFirstResponder()
@@ -166,7 +169,7 @@ class ChatViewController: UIViewController, UITextViewDelegate, LYRQueryControll
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // Return number of objects in queryController
-        return Int(queryController.numberOfObjectsInSection(UInt(section)))
+        return Int(queryController?.numberOfObjectsInSection(UInt(section)) ?? 0)
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {

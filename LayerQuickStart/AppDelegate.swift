@@ -55,16 +55,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LYRClientDelegate, UIAler
                     self.authenticateLayerWithUserID(LQSCurrentUserID) { error in
                         if let error = error {
                             println("Failed Authenticating Layer Client with error: \(error.localizedDescription)")
+                        } else if success {
+                            let navigationController = self.window?.rootViewController as UINavigationController
+                            (navigationController.topViewController as ChatViewController).layerClient = self.layerClient
+
+                            // Register for push
+                            self.registerApplicationForPushNotifications(application)
                         }
                     }
                 }
             }
-
-            // Register for push
-            registerApplicationForPushNotifications(application)
-
-            let navigationController = window?.rootViewController as UINavigationController
-            (navigationController.topViewController as ChatViewController).layerClient = layerClient
         }
 
         return true
